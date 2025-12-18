@@ -43,9 +43,14 @@ const App = () => {
         const match = persons.filter(people => nameObject.name === people.name)
         const matchID = match[0].id
         const changedPerson = {...match[0], number: newNumber}
+        const newPersons = [...persons]
+        const index = persons.findIndex(item => item.id === matchID);
         console.log("changed person: ", changedPerson)
         noteService
           .update(matchID, changedPerson)
+        newPersons[index].number = newNumber
+        setPersons(newPersons)
+        setNewArr(newPersons)
         setSuccessMessage(
           `Changed '${nameObject.name}'s number to '${changedPerson.number}'`
         )

@@ -53,6 +53,17 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+app.put('/api/persons/:id', (request, response) =>{
+  const id = request.body.id;
+  const newNumber = request.body.number;
+
+  const index = persons.findIndex(item => item.id === id);
+
+  if (index !== -1) {
+    persons[index].number = newNumber;
+  }
+})
+
 const getID = () => {
     const minCeiled = Math.ceil(5);
     const maxFloored = Math.floor(1000);
