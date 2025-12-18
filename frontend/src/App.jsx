@@ -84,6 +84,8 @@ const App = () => {
         setDeleteMessage(
           `Deleted '${name}'`
         )
+        setPersons(persons.filter(person => person.id !== id))
+        setNewArr(newArr.filter(person => person.id !== id))
         setTimeout(() => {
           setDeleteMessage(null)
         }, 5000)
