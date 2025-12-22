@@ -60,7 +60,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 app.put('/api/persons/:id', (request, response, next) =>{
-  const { number } = request.body
+  const { name, number } = request.body
 
   Person.findById(request.params.id)
     .then(person => {
@@ -68,6 +68,7 @@ app.put('/api/persons/:id', (request, response, next) =>{
         return response.status(404).end()
       }
 
+      person.name = name
       person.number = number
 
       return person.save().then((updatedPerson) => {
