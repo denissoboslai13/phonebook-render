@@ -30,6 +30,7 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
+
     const nameObject = {
       name: newName,
       number: newNumber,
@@ -38,7 +39,10 @@ const App = () => {
     const names = persons.map(people => people.name)
     console.log(names)
 
-    if (names.includes(newName)){
+    if (!newName || !newNumber ){
+      window.alert('Please add all values')
+    }
+    else if (names.includes(newName)){
       if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
         const match = persons.filter(people => nameObject.name === people.name)
         const matchID = match[0].id
