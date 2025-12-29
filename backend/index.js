@@ -29,21 +29,21 @@ app.get('/', (request, response) => {
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(person => {
-    console.log("person", person)
+    console.log('person', person)
     response.json(person)
   })
 })
 
 app.get('/info', (request, response) => {
-    const datum = new Date();
-    Person.find({}).then(persons => {
-      response.send(`<p>Phonebook has info for ${persons.length} people</p> <p>${datum}</p>`)
-    })
+  const datum = new Date()
+  Person.find({}).then(persons => {
+    response.send(`<p>Phonebook has info for ${persons.length} people</p> <p>${datum}</p>`)
+  })
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
-  .then(person => {
+    .then(person => {
       if (person) {
         response.json(person)
       } else {
@@ -53,7 +53,7 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.put('/api/persons/:id', (request, response, next) =>{
+app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Person.findByIdAndUpdate(request.params.id, { name, number },
@@ -74,16 +74,16 @@ app.post('/api/persons', (request, response, next) => {
   Person.find({}).then(persons => {
     const names = persons.map(person => person.name)
 
-      if (names.includes(body.name)){
-        return response.status(400).json({ 
-          error: 'name must be unique' 
-        })
-      }
+    if (names.includes(body.name)){
+      return response.status(400).json({
+        error: 'name must be unique'
+      })
+    }
   })
 
   if (!body.name || !body.number) {
-    return response.status(400).json({ 
-      error: 'content missing' 
+    return response.status(400).json({
+      error: 'content missing'
     })
   }
 
@@ -100,9 +100,9 @@ app.post('/api/persons', (request, response, next) => {
     .catch((error) => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
