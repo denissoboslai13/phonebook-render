@@ -5,6 +5,7 @@ import Persons from './components/Persons'
 import noteService from './services/notes'
 import Success from './components/Success'
 import Delete from './components/Delete'
+import Error from './components/Error'
 import './index.css'
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
   const [newArr, setNewArr] = useState(persons)
   const [successMessage, setSuccessMessage] = useState(null)
   const [deleteMessage, setDeleteMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const hook = () => {
     noteService
@@ -52,14 +54,23 @@ const App = () => {
         console.log("changed person: ", changedPerson)
         noteService
           .update(matchID, changedPerson)
-        newPersons[index].number = newNumber
-        setPersons(newPersons)
-        setNewArr(newPersons)
-        setSuccessMessage(
-          `Changed '${nameObject.name}'s number to '${changedPerson.number}'`
-        )
+          .then(response => {
+            newPersons[index].number = newNumber
+            setPersons(newPersons)
+            setNewArr(newPersons)
+            setSuccessMessage(
+              `Changed '${nameObject.name}'s number to '${changedPerson.number}'`
+            )
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000)
+        })
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
+          console.log('Error message: ', error.response.data.error)
+        })
         setTimeout(() => {
-          setSuccessMessage(null)
+          setErrorMessage(null)
         }, 5000)
       }
     }
@@ -76,6 +87,13 @@ const App = () => {
             setSuccessMessage(null)
           }, 5000)
         })
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
+            console.log('Error message: ', error.response.data.error)
+        })
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
     }
   }
   
@@ -132,6 +150,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Success message={successMessage} />
       <Delete message={deleteMessage} />
+      <Error message={errorMessage} />
       <Filter onChange={handleFilterChange}/>
       <h2>add a new</h2>
       <Forms onSubmit={addName} handleName={handleNameChange} handleNumber={handleNumberChange}/>
